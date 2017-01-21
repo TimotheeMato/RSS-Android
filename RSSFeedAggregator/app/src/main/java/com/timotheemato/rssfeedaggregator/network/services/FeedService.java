@@ -21,7 +21,7 @@ import retrofit2.Retrofit;
 
 public class FeedService {
     private IFeedService feedService;
-    private boolean isRequestingInformation;
+    private boolean isRequestingInformation = false;
 
     public FeedService(Retrofit retrofit) {
         this.feedService = retrofit.create(IFeedService.class);
@@ -59,5 +59,9 @@ public class FeedService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .ignoreElements();
+    }
+
+    public boolean isRequestingInformation() {
+        return isRequestingInformation;
     }
 }

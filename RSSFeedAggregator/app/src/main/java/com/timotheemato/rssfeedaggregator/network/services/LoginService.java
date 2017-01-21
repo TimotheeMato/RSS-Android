@@ -20,7 +20,7 @@ import retrofit2.Retrofit;
 public class LoginService {
 
     private ILoginService loginService;
-    private boolean isRequestingInformation;
+    private boolean isRequestingInformation = false;
 
     public LoginService(Retrofit retrofit) {
         this.loginService = retrofit.create(ILoginService.class);
@@ -50,5 +50,9 @@ public class LoginService {
                 .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public boolean isRequestingInformation() {
+        return isRequestingInformation;
     }
 }
