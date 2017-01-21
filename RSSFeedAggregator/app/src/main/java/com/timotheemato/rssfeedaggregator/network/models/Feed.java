@@ -1,4 +1,4 @@
-package com.timotheemato.rssfeedaggregator.models;
+package com.timotheemato.rssfeedaggregator.network.models;
 
 /**
  * Created by tmato on 1/21/17.

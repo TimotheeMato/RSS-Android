@@ -1,4 +1,4 @@
-package com.timotheemato.rssfeedaggregator.models;
+package com.timotheemato.rssfeedaggregator.network.models;
 
 import com.google.gson.annotations.Expose;
 
@@ -25,6 +25,11 @@ public class LoginRequest {
     }
 
     public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 }

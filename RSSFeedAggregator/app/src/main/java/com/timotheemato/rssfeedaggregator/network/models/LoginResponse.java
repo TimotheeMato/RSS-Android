@@ -1,4 +1,4 @@
-package com.timotheemato.rssfeedaggregator.models;
+package com.timotheemato.rssfeedaggregator.network.models;
 
 import com.google.gson.annotations.Expose;
 
