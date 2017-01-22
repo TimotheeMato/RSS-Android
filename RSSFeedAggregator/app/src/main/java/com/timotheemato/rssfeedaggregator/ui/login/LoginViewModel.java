@@ -1,15 +1,12 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
-import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.base.Constants;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.base.NetworkViewModel;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
-import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkLoginException;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_FAILED;
