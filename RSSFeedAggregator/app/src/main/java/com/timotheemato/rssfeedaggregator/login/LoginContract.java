@@ -10,11 +10,11 @@ public interface LoginContract {
 
     interface View extends Lifecycle.View {
 
-        void hideProgressDialog();
+        void stopLoading();
 
         void launchHomeActivity();
 
-        void showMessage(String message);
+        void showMessage(Integer idMessage);
     }
 
     interface ViewModel extends Lifecycle.ViewModel {

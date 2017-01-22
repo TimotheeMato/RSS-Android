@@ -2,6 +2,7 @@
 
     <!-- Base -->
     <string name="share_pref">Preferences</string>
+    <string name="network_error">Network failure</string>
 
     <!-- Login -->
     <string name="app_name">RSS Feed Aggregator</string>
@@ -10,6 +11,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="or">Or</string>
+    <string name="login_error">Login failure</string>
 
 
 </resources>
