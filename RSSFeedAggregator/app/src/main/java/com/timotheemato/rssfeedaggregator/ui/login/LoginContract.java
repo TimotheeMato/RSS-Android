@@ -14,11 +14,11 @@ public interface LoginContract {
 
         void launchHomeActivity();
 
-        void showMessage(Integer idMessage);
+        void showMessage(String message);
     }
 
     interface ViewModel extends Lifecycle.ViewModel {
 
-        void login();
+        void login(String email, String password);
     }
 }

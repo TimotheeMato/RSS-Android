@@ -1,5 +1,7 @@
 package com.timotheemato.rssfeedaggregator.network.services;
 
+import android.util.Log;
+
 import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkGeneralException;
 import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkLoginException;
 import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkRegisterException;
@@ -10,6 +12,7 @@ import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 import java.net.HttpRetryException;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -28,31 +31,13 @@ public class LoginService {
         this.loginService = retrofit.create(ILoginService.class);
     }
 
-    public Completable register(String email, String password) {
+    public Maybe<SimpleResponse> register(String email, String password) {
         return loginService.register(email, password)
                 .doOnSubscribe(disposable -> isRequestingInformation = true)
                 .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .onErrorResumeNext(this::handleRegistrationError)
-                .ignoreElements();
-    }
-
-    private Observable<SimpleResponse> handleRegistrationError(Throwable throwable) {
-
-        if (throwable instanceof HttpRetryException) {
-
-            int status = ((HttpRetryException) throwable).responseCode();
-
-            if (status >= 400 && status < 500) {
-                throw new NetworkRegisterException();
-            } else {
-                throw new NetworkGeneralException();
-            }
-
-        } else {
-            throw new NetworkGeneralException();
-        }
+                .singleElement();
     }
 
     public Completable unregister(String authorization) {
@@ -64,30 +49,13 @@ public class LoginService {
                 .ignoreElements();
     }
 
-    public Observable<LoginResponse> login(String email, String password) {
+    public Maybe<LoginResponse> login(String email, String password) {
         return loginService.login(email, password)
                 .doOnSubscribe(disposable -> isRequestingInformation = true)
                 .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .onErrorResumeNext(this::handleLoginError);
-    }
-
-    private Observable<LoginResponse> handleLoginError(Throwable throwable) {
-
-        if (throwable instanceof HttpRetryException) {
-
-            int status = ((HttpRetryException) throwable).responseCode();
-
-            if (status >= 400 && status < 500) {
-                throw new NetworkLoginException();
-            } else {
-                throw new NetworkGeneralException();
-            }
-
-        } else {
-            throw new NetworkGeneralException();
-        }
+                .singleElement();
     }
 
     public boolean isRequestingInformation() {

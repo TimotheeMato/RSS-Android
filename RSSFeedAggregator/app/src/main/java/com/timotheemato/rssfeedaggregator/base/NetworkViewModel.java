@@ -1,6 +1,8 @@
 package com.timotheemato.rssfeedaggregator.base;
 
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.observers.DisposableObserver;
 
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_FAILED;
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_NONE;

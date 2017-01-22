@@ -1,7 +1,9 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.base.Constants;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
@@ -56,33 +58,37 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         return requestManager.isRequestingInformation();
     }
 
-    public void login() {
-        // TODO : Request login
+    public void login(String email, String password) {
+        requestManager.login(email, password).subscribe(new LoginObserver());
     }
 
     private void onLoginCompleted() {
-
         if (viewCallback != null) {
 
             viewCallback.stopLoading();
             viewCallback.launchHomeActivity();
-
         }
     }
 
     private void onLoginError(Throwable e) {
-
         if (viewCallback != null) {
 
             viewCallback.stopLoading();
 
-            if (e instanceof NetworkLoginException) {
-
-                viewCallback.showMessage(R.string.login_error);
-
+            if (e instanceof HttpException) {
+                int statusCode = ((HttpException) e).code();
+                if (statusCode >= 400 && statusCode < 500) {
+                    viewCallback.showMessage("Login failure");
+                } else {
+                    viewCallback.showMessage("Network failure, try again later");
+                }
             } else {
-
-                viewCallback.showMessage(R.string.network_error);
+                String message = e.getMessage();
+                if (!message.equals("")) {
+                    viewCallback.showMessage(message);
+                } else {
+                    viewCallback.showMessage("Technical error, try again later");
+                }
             }
         }
     }

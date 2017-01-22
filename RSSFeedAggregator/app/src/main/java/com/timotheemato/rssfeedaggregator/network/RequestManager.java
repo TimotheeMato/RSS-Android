@@ -4,10 +4,13 @@ import android.content.Context;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
+import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 import com.timotheemato.rssfeedaggregator.network.services.FeedService;
 import com.timotheemato.rssfeedaggregator.network.services.LoginService;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -57,7 +60,7 @@ public class RequestManager {
                 .build();
     }
 
-    public Completable register(String email, String password) {
+    public Maybe<SimpleResponse> register(String email, String password) {
         return loginService.register(email, password);
     }
 
@@ -65,7 +68,7 @@ public class RequestManager {
         return loginService.unregister(authorization);
     }
 
-    public Observable<LoginResponse> login(String email, String password) {
+    public MaybeSource<LoginResponse> login(String email, String password) {
         return loginService.login(email, password);
     }
 }
