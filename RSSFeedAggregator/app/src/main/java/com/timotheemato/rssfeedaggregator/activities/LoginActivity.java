@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.timotheemato.rssfeedaggregator.R;
-import com.timotheemato.rssfeedaggregator.login.LoginFragment;
+import com.timotheemato.rssfeedaggregator.ui.login.LoginFragment;
 
 public class LoginActivity extends AppCompatActivity {
 
