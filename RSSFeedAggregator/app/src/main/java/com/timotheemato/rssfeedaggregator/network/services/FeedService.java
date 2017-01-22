@@ -1,10 +1,7 @@
 package com.timotheemato.rssfeedaggregator.network.services;
 
 import com.timotheemato.rssfeedaggregator.network.interfaces.IFeedService;
-import com.timotheemato.rssfeedaggregator.network.interfaces.ILoginService;
 import com.timotheemato.rssfeedaggregator.network.models.Feed;
-import com.timotheemato.rssfeedaggregator.network.models.LoginRequest;
-import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 
 import java.util.List;

@@ -6,8 +6,10 @@
     <!-- Login -->
     <string name="app_name">RSS Feed Aggregator</string>
     <string name="login">Login</string>
+    <string name="register">No account? Register instead</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="or">Or</string>
 
 
 </resources>

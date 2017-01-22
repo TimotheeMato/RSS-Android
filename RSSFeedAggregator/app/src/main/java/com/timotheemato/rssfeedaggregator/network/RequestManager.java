@@ -1,15 +1,14 @@
 package com.timotheemato.rssfeedaggregator.network;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.timotheemato.rssfeedaggregator.R;
-import com.timotheemato.rssfeedaggregator.network.models.LoginRequest;
+import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.services.FeedService;
 import com.timotheemato.rssfeedaggregator.network.services.LoginService;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -59,11 +58,14 @@ public class RequestManager {
     }
 
     public Completable register(String email, String password) {
-        LoginRequest loginRequest = new LoginRequest(email, password);
-        return loginService.register(loginRequest);
+        return loginService.register(email, password);
     }
 
     public Completable unregister(String authorization) {
         return loginService.unregister(authorization);
+    }
+
+    public Observable<LoginResponse> login(String email, String password) {
+        return loginService.login(email, password);
     }
 }
