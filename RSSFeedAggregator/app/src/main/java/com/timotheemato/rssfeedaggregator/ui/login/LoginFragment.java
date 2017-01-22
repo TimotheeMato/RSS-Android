@@ -70,6 +70,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
             showMessage("You need to fill every fields");
             return;
         }
+        loginButton.setText("Loading...");
         loginViewModel.login(email, password);
     }
 
