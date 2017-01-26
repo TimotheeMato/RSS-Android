@@ -1,61 +1,28 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.timotheemato.rssfeedaggregator.base.Constants;
-import com.timotheemato.rssfeedaggregator.base.Lifecycle;
-import com.timotheemato.rssfeedaggregator.base.NetworkViewModel;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import retrofit2.adapter.rxjava.HttpException;
-
-import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_FAILED;
-import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_SUCCEEDED;
+import rx.Observer;
 
 /**
  * Created by tmato on 1/22/17.
  */
 
-public class LoginViewModel extends NetworkViewModel implements LoginContract.ViewModel {
+public class LoginViewModel implements LoginContract.ViewModel {
 
     private LoginContract.View viewCallback;
     private RequestManager requestManager;
 
+    private String token;
+
     public LoginViewModel(RequestManager requestManager) {
         this.requestManager = requestManager;
-    }
-
-    @Override
-    public void onViewResumed() {
-
-        @Constants.RequestState int requestState = getRequestState();
-        if (requestState == REQUEST_SUCCEEDED) {
-            onLoginCompleted();
-        } else if (requestState == REQUEST_FAILED) {
-            onLoginError(getLastError());
-        }
-    }
-
-    @Override
-    public void onViewAttached(@NonNull Lifecycle.View viewCallback) {
-        this.viewCallback = (LoginContract.View) viewCallback;
-    }
-
-    @Override
-    public void onViewDetached() {
-        this.viewCallback = null;
-    }
-
-    @Override
-    public boolean isRequestingInformation() {
-        return requestManager.isRequestingInformation();
     }
 
     public void login(String email, String password) {
@@ -74,31 +41,34 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         }
     }
 
+    private void checkError(Throwable e, String message) {
+        if (e instanceof HttpException) {
+            int statusCode = ((HttpException) e).code();
+            if (statusCode >= 400 && statusCode < 500) {
+                ErrorResponse errorResponse = requestManager.getError(((HttpException) e).response());
+                if (errorResponse.getErrors().get(0) != null) {
+                    viewCallback.showMessage(errorResponse.getErrors().get(0));
+                } else {
+                    viewCallback.showMessage(message);
+                }
+            } else {
+                viewCallback.showMessage("Network failure, try again later");
+            }
+        } else {
+            String errorMessage = e.getMessage();
+            if (!message.equals("")) {
+                viewCallback.showMessage(errorMessage);
+            } else {
+                viewCallback.showMessage("Technical error, try again later");
+            }
+        }
+    }
+
     private void onLoginError(Throwable e) {
         if (viewCallback != null) {
 
             viewCallback.stopLoading();
-
-            if (e instanceof HttpException) {
-                int statusCode = ((HttpException) e).code();
-                if (statusCode >= 400 && statusCode < 500) {
-                    ErrorResponse errorResponse = requestManager.getError(((HttpException) e).response());
-                    if (errorResponse.getErrors().get(0) != null) {
-                        viewCallback.showMessage(errorResponse.getErrors().get(0));
-                    } else {
-                        viewCallback.showMessage("Login failure");
-                    }
-                } else {
-                    viewCallback.showMessage("Network failure, try again later");
-                }
-            } else {
-                String message = e.getMessage();
-                if (!message.equals("")) {
-                    viewCallback.showMessage(message);
-                } else {
-                    viewCallback.showMessage("Technical error, try again later");
-                }
-            }
+            checkError(e, "Login failure");
         }
     }
 
@@ -114,30 +84,11 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         if (viewCallback != null) {
 
             viewCallback.stopLoading();
-            if (e instanceof HttpException) {
-                int statusCode = ((HttpException) e).code();
-                if (statusCode >= 400 && statusCode < 500) {
-                    ErrorResponse errorResponse = requestManager.getError(((HttpException) e).response());
-                    if (errorResponse.getErrors().get(0) != null) {
-                        viewCallback.showMessage(errorResponse.getErrors().get(0));
-                    } else {
-                        viewCallback.showMessage("Register failure");
-                    }
-                } else {
-                    viewCallback.showMessage("Network failure, try again later");
-                }
-            } else {
-                String message = e.getMessage();
-                if (!message.equals("")) {
-                    viewCallback.showMessage(message);
-                } else {
-                    viewCallback.showMessage("Technical error, try again later");
-                }
-            }
+            checkError(e, "Registration failure");
         }
     }
 
-    private class LoginObserver extends NetworkObserver<LoginResponse> {
+    private class LoginObserver implements Observer<LoginResponse> {
 
         @Override
         public void onNext(LoginResponse response) {
@@ -155,7 +106,7 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         }
     }
 
-    private class RegisterObserver extends NetworkObserver<SimpleResponse> {
+    private class RegisterObserver implements Observer<SimpleResponse> {
 
         @Override
         public void onNext(SimpleResponse response) {

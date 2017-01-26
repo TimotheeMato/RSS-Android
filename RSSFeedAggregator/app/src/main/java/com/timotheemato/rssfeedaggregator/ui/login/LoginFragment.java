@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.base.BaseFragment;
-import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 
 import butterknife.BindView;
