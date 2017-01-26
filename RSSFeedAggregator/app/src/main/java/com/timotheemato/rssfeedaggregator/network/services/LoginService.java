@@ -1,10 +1,5 @@
 package com.timotheemato.rssfeedaggregator.network.services;
 
-import android.util.Log;
-
-import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkGeneralException;
-import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkLoginException;
-import com.timotheemato.rssfeedaggregator.network.exceptions.NetworkRegisterException;
 import com.timotheemato.rssfeedaggregator.network.interfaces.ILoginService;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
@@ -16,6 +11,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -31,7 +27,7 @@ public class LoginService {
         this.loginService = retrofit.create(ILoginService.class);
     }
 
-    public Maybe<SimpleResponse> register(String email, String password) {
+    public Maybe<Void> register(String email, String password) {
         return loginService.register(email, password)
                 .doOnSubscribe(disposable -> isRequestingInformation = true)
                 .doOnTerminate(() -> isRequestingInformation = false)

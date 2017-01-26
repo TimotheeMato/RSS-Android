@@ -20,5 +20,6 @@ public interface LoginContract {
     interface ViewModel extends Lifecycle.ViewModel {
 
         void login(String email, String password);
+        void register(String email, String password);
     }
 }

@@ -76,7 +76,14 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @OnClick(R.id.register_button)
     public void registerButtonTap(View view) {
-
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+        if (email.equals("") || password.equals("")) {
+            showMessage("You need to fill every fields");
+            return;
+        }
+        loginButton.setText("Loading...");
+        loginViewModel.register(email, password);
     }
 
     @Override
@@ -86,7 +93,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void stopLoading() {
-
+        loginButton.setText("Login");
     }
 
     @Override

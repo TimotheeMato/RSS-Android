@@ -13,7 +13,7 @@ public class Subscription {
     @Expose private String url;
     @Expose private String title;
     @Expose private String description;
-    @Expose private String Author;
+    @Expose private String author;
     @Expose private List<String> errors;
 
     public Integer getId() {
@@ -49,11 +49,11 @@ public class Subscription {
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String author) {
-        Author = author;
+        this.author = author;
     }
 
     public List<String> getErrors() {
