@@ -1,8 +1,6 @@
 package com.timotheemato.rssfeedaggregator.base;
 
-import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.observers.DisposableMaybeObserver;
-import io.reactivex.observers.DisposableObserver;
+import rx.Observer;
 
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_FAILED;
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_NONE;
@@ -41,10 +39,10 @@ public abstract class NetworkViewModel {
         return lastError;
     }
 
-    protected class MaybeNetworkObserver<T> extends DisposableMaybeObserver<T> {
+    protected class NetworkObserver<T> implements Observer<T> {
 
         @Override
-        public void onSuccess(T value) {
+        public void onNext(T value) {
 
             requestState = REQUEST_SUCCEEDED;
         }
@@ -57,7 +55,7 @@ public abstract class NetworkViewModel {
         }
 
         @Override
-        public void onComplete() {
+        public void onCompleted() {
 
         }
     }

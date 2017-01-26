@@ -4,15 +4,10 @@ import com.timotheemato.rssfeedaggregator.network.interfaces.ILoginService;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 
-import java.net.HttpRetryException;
-
-import io.reactivex.Completable;
-import io.reactivex.Maybe;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by tmato on 1/21/17.
@@ -27,31 +22,29 @@ public class LoginService {
         this.loginService = retrofit.create(ILoginService.class);
     }
 
-    public Maybe<Void> register(String email, String password) {
+    public Observable<SimpleResponse> register(String email, String password) {
         return loginService.register(email, password)
-                .doOnSubscribe(disposable -> isRequestingInformation = true)
+                .doOnSubscribe(() -> isRequestingInformation = true)
                 .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .singleElement();
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Completable unregister(String authorization) {
+    public Observable<SimpleResponse> unregister(String authorization) {
         return loginService.unregister(authorization)
-                .doOnSubscribe(disposable -> isRequestingInformation = true)
+                .doOnSubscribe(() -> isRequestingInformation = true)
                 .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .ignoreElements();
     }
 
-    public Maybe<LoginResponse> login(String email, String password) {
+    public Observable<LoginResponse> login(String email, String password) {
         return loginService.login(email, password)
-                .doOnSubscribe(disposable -> isRequestingInformation = true)
+                .doOnSubscribe(() -> isRequestingInformation = true)
                 .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .singleElement();
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public boolean isRequestingInformation() {

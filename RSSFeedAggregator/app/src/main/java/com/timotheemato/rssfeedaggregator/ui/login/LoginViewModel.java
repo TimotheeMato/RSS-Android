@@ -3,13 +3,18 @@ package com.timotheemato.rssfeedaggregator.ui.login;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.timotheemato.rssfeedaggregator.base.Constants;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.base.NetworkViewModel;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
+import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import retrofit2.adapter.rxjava.HttpException;
 
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_FAILED;
 import static com.timotheemato.rssfeedaggregator.base.Constants.REQUEST_SUCCEEDED;
@@ -106,10 +111,6 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
     }
 
     private void onRegisterError(Throwable e) {
-        if (e instanceof NullPointerException) {
-            onRegisterCompleted();
-            return;
-        }
         if (viewCallback != null) {
 
             viewCallback.stopLoading();
@@ -136,10 +137,10 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         }
     }
 
-    private class LoginObserver extends MaybeNetworkObserver<LoginResponse> {
+    private class LoginObserver extends NetworkObserver<LoginResponse> {
 
         @Override
-        public void onSuccess(LoginResponse response) {
+        public void onNext(LoginResponse response) {
             onLoginCompleted();
         }
 
@@ -149,15 +150,15 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         }
 
         @Override
-        public void onComplete() {
+        public void onCompleted() {
 
         }
     }
 
-    private class RegisterObserver extends MaybeNetworkObserver<Void> {
+    private class RegisterObserver extends NetworkObserver<SimpleResponse> {
 
         @Override
-        public void onSuccess(Void response) {
+        public void onNext(SimpleResponse response) {
             onRegisterCompleted();
         }
 
@@ -167,7 +168,7 @@ public class LoginViewModel extends NetworkViewModel implements LoginContract.Vi
         }
 
         @Override
-        public void onComplete() {
+        public void onCompleted() {
 
         }
     }
