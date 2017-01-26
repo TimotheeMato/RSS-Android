@@ -1,7 +1,9 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
@@ -18,11 +20,21 @@ public class LoginViewModel implements LoginContract.ViewModel {
 
     private LoginContract.View viewCallback;
     private RequestManager requestManager;
-
-    private String token;
-
+    
     public LoginViewModel(RequestManager requestManager) {
         this.requestManager = requestManager;
+    }
+
+    @Override
+    public void onViewAttached(@NonNull Lifecycle.View viewCallback) {
+
+        this.viewCallback = (LoginContract.View) viewCallback;
+    }
+
+    @Override
+    public void onViewDetached() {
+
+        this.viewCallback = null;
     }
 
     public void login(String email, String password) {

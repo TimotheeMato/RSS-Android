@@ -16,7 +16,6 @@ import rx.schedulers.Schedulers;
 public class LoginService {
 
     private ILoginService loginService;
-    private boolean isRequestingInformation = false;
 
     public LoginService(Retrofit retrofit) {
         this.loginService = retrofit.create(ILoginService.class);
@@ -24,30 +23,19 @@ public class LoginService {
 
     public Observable<SimpleResponse> register(String email, String password) {
         return loginService.register(email, password)
-                .doOnSubscribe(() -> isRequestingInformation = true)
-                .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<SimpleResponse> unregister(String authorization) {
         return loginService.unregister(authorization)
-                .doOnSubscribe(() -> isRequestingInformation = true)
-                .doOnTerminate(() -> isRequestingInformation = false)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .ignoreElements();
-    }
-
-    public Observable<LoginResponse> login(String email, String password) {
-        return loginService.login(email, password)
-                .doOnSubscribe(() -> isRequestingInformation = true)
-                .doOnTerminate(() -> isRequestingInformation = false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public boolean isRequestingInformation() {
-        return isRequestingInformation;
+    public Observable<LoginResponse> login(String email, String password) {
+        return loginService.login(email, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -1,12 +1,14 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
+import com.timotheemato.rssfeedaggregator.base.Lifecycle;
+
 /**
  * Created by tmato on 1/21/17.
  */
 
 public interface LoginContract {
 
-    interface View {
+    interface View extends Lifecycle.View {
 
         void stopLoading();
 
@@ -15,7 +17,7 @@ public interface LoginContract {
         void showMessage(String message);
     }
 
-    interface ViewModel {
+    interface ViewModel extends Lifecycle.ViewModel {
 
         void login(String email, String password);
         void register(String email, String password);

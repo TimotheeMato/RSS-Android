@@ -52,11 +52,6 @@ public class RequestManager {
         }
     }
 
-    public boolean isRequestingInformation() {
-        return loginService.isRequestingInformation() ||
-                feedService.isRequestingInformation();
-    }
-
     private Retrofit getAdapter() {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
