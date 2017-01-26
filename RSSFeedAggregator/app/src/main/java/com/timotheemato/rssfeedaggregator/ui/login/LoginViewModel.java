@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
+import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
@@ -20,20 +21,20 @@ public class LoginViewModel implements LoginContract.ViewModel {
 
     private LoginContract.View viewCallback;
     private RequestManager requestManager;
-    
-    public LoginViewModel(RequestManager requestManager) {
+    private SharedPrefManager sharedPrefManager;
+
+    public LoginViewModel(RequestManager requestManager, SharedPrefManager sharedPrefManager) {
         this.requestManager = requestManager;
+        this.sharedPrefManager = sharedPrefManager;
     }
 
     @Override
     public void onViewAttached(@NonNull Lifecycle.View viewCallback) {
-
         this.viewCallback = (LoginContract.View) viewCallback;
     }
 
     @Override
     public void onViewDetached() {
-
         this.viewCallback = null;
     }
 
@@ -45,9 +46,9 @@ public class LoginViewModel implements LoginContract.ViewModel {
         requestManager.register(email, password).subscribe(new RegisterObserver());
     }
 
-    private void onLoginCompleted() {
+    private void onLoginCompleted(LoginResponse response) {
         if (viewCallback != null) {
-
+            sharedPrefManager.storeToken(response.getToken());
             viewCallback.stopLoading();
             viewCallback.launchHomeActivity();
         }
@@ -104,7 +105,7 @@ public class LoginViewModel implements LoginContract.ViewModel {
 
         @Override
         public void onNext(LoginResponse response) {
-            onLoginCompleted();
+            onLoginCompleted(response);
         }
 
         @Override

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.base.BaseFragment;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
+import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 
 import butterknife.BindView;
@@ -42,8 +43,9 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
         super.onCreate(savedInstanceState);
         RequestManager requestManager =
                 RequestManager.getInstance(getActivity().getApplicationContext());
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(getActivity().getApplicationContext());
 
-        loginViewModel = new LoginViewModel(requestManager);
+        loginViewModel = new LoginViewModel(requestManager, sharedPrefManager);
     }
 
     @Override
