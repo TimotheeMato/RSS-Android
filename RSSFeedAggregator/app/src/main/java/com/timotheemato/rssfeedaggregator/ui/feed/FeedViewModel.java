@@ -50,7 +50,6 @@ public class FeedViewModel extends BaseViewModel implements FeedContract.ViewMod
 
     private void onFeedSuccess(List<Post> postList) {
         if (viewCallback != null) {
-            viewCallback.showMessage("You have been subscribed");
             viewCallback.showContent(postList);
         }
     }

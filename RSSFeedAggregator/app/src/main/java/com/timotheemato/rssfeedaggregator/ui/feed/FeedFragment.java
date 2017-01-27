@@ -13,11 +13,14 @@ import android.widget.Toast;
 
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.base.BaseFragment;
+import com.timotheemato.rssfeedaggregator.base.EndlessRecyclerViewScrollListener;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.Post;
+import com.timotheemato.rssfeedaggregator.ui.adapters.PostAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,6 +46,10 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
     private int feedId;
     private String feedTitle;
 
+    private List<Post> postList;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private PostAdapter adapter;
+
     public FeedFragment() {
         // Required empty public constructor
     }
@@ -65,13 +72,19 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
             feedTitle = bundle.getString(KEY_TITLE);
         }
 
-
-
         RequestManager requestManager =
                 RequestManager.getInstance(getActivity().getApplicationContext());
         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(getActivity().getApplicationContext());
 
         feedViewModel = new FeedViewModel(requestManager, sharedPrefManager);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (postList.size() == 0) {
+            feedViewModel.getPosts(feedId, 10, 0);
+        }
     }
 
     @Override
@@ -83,11 +96,22 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
 
         feedTitleTextView.setText(feedTitle);
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-//        adapter = new FeedAdapter(getContext());
-//        recyclerView.setAdapter(adapter);
+        postList = new ArrayList<>();
+
+        adapter = new PostAdapter(getContext());
+        recyclerView.setAdapter(adapter);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                feedViewModel.getPosts(feedId, 10, totalItemsCount);
+            }
+        };
+
+        recyclerView.addOnScrollListener(scrollListener);
 
         return rootView;
     }
@@ -125,10 +149,10 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
     @Override
     public void showContent(List<Post> postList) {
         stopLoading();
-        if (postList.size() == 0) {
+        if (postList.size() == 0 && adapter.getItemCount() == 0) {
             showError();
         } else {
-            //adapter.getPostList(subscriptionList);
+            adapter.addPostToList(postList);
             contentLayout.setVisibility(View.VISIBLE);
         }
     }
