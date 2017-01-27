@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
 
         sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
@@ -40,9 +39,11 @@ public class MainActivity extends AppCompatActivity {
             logout();
         }
 
-        Fragment initialFragment = SubscriptionsFragment.newInstance();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, initialFragment).commit();
+        if (savedInstanceState == null) {
+            Fragment initialFragment = SubscriptionsFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, initialFragment).commit();
+        }
     }
 
     private void logout() {

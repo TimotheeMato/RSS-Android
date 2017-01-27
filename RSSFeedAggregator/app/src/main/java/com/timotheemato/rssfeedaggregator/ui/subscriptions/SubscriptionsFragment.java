@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +22,9 @@ import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.Subscription;
+import com.timotheemato.rssfeedaggregator.ui.adapters.SubscriptionsAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,7 +45,12 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     RelativeLayout errorLayout;
     @BindView(R.id.add_subscription_button)
     FloatingActionButton addSubscriptionButton;
+
     private SubscriptionsViewModel subscriptionsViewModel;
+
+    private List<Subscription> subscriptionList;
+
+    private SubscriptionsAdapter adapter;
 
     public SubscriptionsFragment() {
         // Required empty public constructor
@@ -68,8 +75,16 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_subscriptions, container, false);
+        ButterKnife.setDebug(true);
 
         ButterKnife.bind(this, rootView);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        subscriptionList = new ArrayList<>();
+        adapter = new SubscriptionsAdapter(getContext());
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
@@ -116,12 +131,14 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     @Override
     public void showContent(List<Subscription> subscriptionList) {
+        subscriptionList.add(0, new Subscription("All Subscriptions", "All of your subscriptions in one feed."));
+        this.subscriptionList = subscriptionList;
         stopLoading();
-        Log.d("subscriptionsFragment", "subscriptionList size : " + subscriptionList.size());
         if (subscriptionList.size() == 0) {
             showError();
         } else {
-
+            adapter.setSubscriptionList(subscriptionList);
+            contentLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -130,9 +147,8 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         LayoutInflater inflater = getActivity().getLayoutInflater();
         builder.setTitle("Enter an URL");
 
-        View alertView = inflater.inflate(R.layout.dialog_subscribe, null);
+        final View alertView = inflater.inflate(R.layout.dialog_subscribe, null);
         builder.setView(alertView)
-                // Add action buttons
                 .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -150,8 +166,10 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
                         dialog.dismiss();
                     }
                 });
+
         AlertDialog alert = builder.create();
         alert.show();
+
         Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
         nbutton.setTextColor(getResources().getColor(R.color.colorPrimary));
         Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);

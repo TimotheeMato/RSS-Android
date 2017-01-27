@@ -54,4 +54,9 @@ public class Subscription {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    public Subscription(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }
