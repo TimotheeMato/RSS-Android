@@ -55,7 +55,6 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     @Override
     protected Lifecycle.ViewModel getViewModel() {
-
         return subscriptionsViewModel;
     }
 
