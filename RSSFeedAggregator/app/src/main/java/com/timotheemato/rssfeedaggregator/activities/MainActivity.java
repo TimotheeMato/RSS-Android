@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
@@ -35,13 +37,35 @@ public class MainActivity extends AppCompatActivity {
         sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
 
         if (sharedPrefManager.getToken() == null) {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-            finish();
+            logout();
         }
 
         Fragment initialFragment = SubscriptionsFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, initialFragment).commit();
+    }
+
+    private void logout() {
+        sharedPrefManager.storeToken(null);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
