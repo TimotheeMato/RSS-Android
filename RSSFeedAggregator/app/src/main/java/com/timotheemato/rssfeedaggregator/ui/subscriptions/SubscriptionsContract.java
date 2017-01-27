@@ -13,12 +13,12 @@ public interface SubscriptionsContract {
 
     interface View extends Lifecycle.View {
         void stopLoading();
-        void startLoading();
         void showError();
         void showContent(List<Subscription> subscriptionList);
     }
 
     interface ViewModel extends Lifecycle.ViewModel {
         void getSubscriptions();
+        void subscribe(String url);
     }
 }

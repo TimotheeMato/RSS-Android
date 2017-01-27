@@ -1,13 +1,11 @@
 package com.timotheemato.rssfeedaggregator.ui.subscriptions;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.timotheemato.rssfeedaggregator.R;
-import com.timotheemato.rssfeedaggregator.activities.MainActivity;
 import com.timotheemato.rssfeedaggregator.base.BaseFragment;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
@@ -80,6 +77,7 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     @Override
     public void onStart() {
         super.onStart();
+        startLoading();
         subscriptionsViewModel.getSubscriptions();
     }
 
@@ -101,7 +99,6 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         loadingLayout.setVisibility(View.GONE);
     }
 
-    @Override
     public void startLoading() {
         addSubscriptionButton.setVisibility(View.GONE);
         contentLayout.setVisibility(View.GONE);
@@ -120,7 +117,7 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     @Override
     public void showContent(List<Subscription> subscriptionList) {
         stopLoading();
-        Log.d("subscriptionsFragment", "showContent");
+        Log.d("subscriptionsFragment", "subscriptionList size : " + subscriptionList.size());
         if (subscriptionList.size() == 0) {
             showError();
         } else {
@@ -133,12 +130,19 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         LayoutInflater inflater = getActivity().getLayoutInflater();
         builder.setTitle("Enter an URL");
 
-        builder.setView(inflater.inflate(R.layout.dialog_subscribe, null))
+        View alertView = inflater.inflate(R.layout.dialog_subscribe, null);
+        builder.setView(alertView)
                 // Add action buttons
                 .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
+                        EditText editText = (EditText) alertView.findViewById(R.id.url);
+                        String url = editText.getText().toString();
+                        if (url.equals("")) {
+                            showMessage("You need to enter an URL");
+                        } else {
+                            subscriptionsViewModel.subscribe(url);
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

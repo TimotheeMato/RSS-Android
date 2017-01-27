@@ -1,17 +1,14 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.timotheemato.rssfeedaggregator.base.BaseViewModel;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
-import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
 
 /**
@@ -57,7 +54,7 @@ public class LoginViewModel extends BaseViewModel implements LoginContract.ViewM
     private void onLoginError(Throwable e) {
         if (viewCallback != null) {
             viewCallback.stopLoading();
-            checkError(e, "Login failure");
+            checkError(e, "Login failure", viewCallback);
         }
     }
 
@@ -73,7 +70,7 @@ public class LoginViewModel extends BaseViewModel implements LoginContract.ViewM
         if (viewCallback != null) {
 
             viewCallback.stopLoading();
-            checkError(e, "Registration failure");
+            checkError(e, "Registration failure", viewCallback);
         }
     }
 

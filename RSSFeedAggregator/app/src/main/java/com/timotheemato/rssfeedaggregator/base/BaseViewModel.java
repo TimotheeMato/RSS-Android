@@ -2,7 +2,6 @@ package com.timotheemato.rssfeedaggregator.base;
 
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
-import com.timotheemato.rssfeedaggregator.ui.login.LoginContract;
 
 import retrofit2.adapter.rxjava.HttpException;
 
@@ -11,11 +10,9 @@ import retrofit2.adapter.rxjava.HttpException;
  */
 
 public class BaseViewModel {
-
-    private Lifecycle.View viewCallback;
     protected RequestManager requestManager;
 
-    protected void checkError(Throwable e, String message) {
+    protected void checkError(Throwable e, String message, Lifecycle.View viewCallback) {
         if (e instanceof HttpException) {
             int statusCode = ((HttpException) e).code();
             if (statusCode >= 400 && statusCode < 500) {

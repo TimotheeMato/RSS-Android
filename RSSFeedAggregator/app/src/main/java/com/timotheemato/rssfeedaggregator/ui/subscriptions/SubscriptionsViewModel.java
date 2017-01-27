@@ -45,7 +45,7 @@ public class SubscriptionsViewModel extends BaseViewModel implements Subscriptio
     private void onGetSubscriptionsError(Throwable e) {
         if (viewCallback != null) {
             viewCallback.stopLoading();
-            checkError(e, "Couldn't get subscriptions");
+            checkError(e, "Couldn't get subscriptions", viewCallback);
         }
     }
 
@@ -54,6 +54,27 @@ public class SubscriptionsViewModel extends BaseViewModel implements Subscriptio
             viewCallback.stopLoading();
             viewCallback.showContent(subscriptionList);
         }
+    }
+
+    private void onSubscriptionError(Throwable e) {
+        if (viewCallback != null) {
+            viewCallback.stopLoading();
+            checkError(e, "Couldn't subscribe", viewCallback);
+            viewCallback.showError();
+        }
+    }
+
+    private void onSubscriptionSuccess(Subscription subscription) {
+        if (viewCallback != null) {
+            viewCallback.showMessage("You have been subscribed");
+            getSubscriptions();
+        }
+    }
+
+    @Override
+    public void subscribe(String url) {
+        String token = sharedPrefManager.getToken();
+        requestManager.subscribe(token, url).subscribe(new SubscriptionObserver());
     }
 
     private class SubscriptionsObserver implements Observer<List<Subscription>> {
@@ -66,6 +87,24 @@ public class SubscriptionsViewModel extends BaseViewModel implements Subscriptio
         @Override
         public void onError(Throwable e) {
             onGetSubscriptionsError(e);
+        }
+
+        @Override
+        public void onCompleted() {
+
+        }
+    }
+
+    private class SubscriptionObserver implements Observer<Subscription> {
+
+        @Override
+        public void onNext(Subscription response) {
+            onSubscriptionSuccess(response);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            onSubscriptionError(e);
         }
 
         @Override

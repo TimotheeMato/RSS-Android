@@ -83,6 +83,10 @@ public class RequestManager {
         return feedService.getSubscriptions(authorization);
     }
 
+    public Observable<Subscription> subscribe(String authorization, String url) {
+        return feedService.subscribe(authorization, url);
+    }
+
     public ErrorResponse getError(Response response) {
         try {
             return errorConverter.convert(response.errorBody());
