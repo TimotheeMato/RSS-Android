@@ -65,6 +65,8 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
             feedTitle = bundle.getString(KEY_TITLE);
         }
 
+
+
         RequestManager requestManager =
                 RequestManager.getInstance(getActivity().getApplicationContext());
         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(getActivity().getApplicationContext());
