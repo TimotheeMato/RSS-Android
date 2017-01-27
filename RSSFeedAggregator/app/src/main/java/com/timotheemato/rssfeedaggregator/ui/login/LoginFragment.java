@@ -1,5 +1,6 @@
 package com.timotheemato.rssfeedaggregator.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.timotheemato.rssfeedaggregator.R;
+import com.timotheemato.rssfeedaggregator.activities.MainActivity;
 import com.timotheemato.rssfeedaggregator.base.BaseFragment;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
@@ -100,6 +102,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @Override
     public void launchHomeActivity() {
-
+        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

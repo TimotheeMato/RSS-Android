@@ -32,7 +32,7 @@ public class SharedPrefManager {
     }
 
     public String getToken() {
-        return sharedPreferences.getString(TOKEN_KEY, "");
+        return sharedPreferences.getString(TOKEN_KEY, null);
     }
 
     public void storeToken(String token) {
