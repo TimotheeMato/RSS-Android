@@ -5,6 +5,7 @@ import android.content.Context;
 import com.timotheemato.rssfeedaggregator.BuildConfig;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
+import com.timotheemato.rssfeedaggregator.network.models.Post;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 import com.timotheemato.rssfeedaggregator.network.services.FeedService;
@@ -85,6 +86,10 @@ public class RequestManager {
 
     public Observable<Subscription> subscribe(String authorization, String url) {
         return feedService.subscribe(authorization, url);
+    }
+
+    public Observable<List<Post>> getFeed(String authorization, Integer id, Integer limit, Integer offset) {
+        return feedService.getFeed(authorization, id, limit, offset);
     }
 
     public ErrorResponse getError(Response response) {

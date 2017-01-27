@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,6 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     private SubscriptionsViewModel subscriptionsViewModel;
 
-    private List<Subscription> subscriptionList;
-
     private SubscriptionsAdapter adapter;
 
     public SubscriptionsFragment() {
@@ -75,14 +74,13 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_subscriptions, container, false);
-        ButterKnife.setDebug(true);
+
 
         ButterKnife.bind(this, rootView);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        subscriptionList = new ArrayList<>();
         adapter = new SubscriptionsAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
@@ -119,7 +117,6 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         contentLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -131,8 +128,6 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     @Override
     public void showContent(List<Subscription> subscriptionList) {
-        subscriptionList.add(0, new Subscription("All Subscriptions", "All of your subscriptions in one feed."));
-        this.subscriptionList = subscriptionList;
         stopLoading();
         if (subscriptionList.size() == 0) {
             showError();

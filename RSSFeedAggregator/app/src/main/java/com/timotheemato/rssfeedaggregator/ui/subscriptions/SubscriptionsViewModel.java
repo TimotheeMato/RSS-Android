@@ -1,6 +1,7 @@
 package com.timotheemato.rssfeedaggregator.ui.subscriptions;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.timotheemato.rssfeedaggregator.base.BaseViewModel;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;

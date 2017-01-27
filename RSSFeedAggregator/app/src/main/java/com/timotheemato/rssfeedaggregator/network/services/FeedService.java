@@ -1,7 +1,7 @@
 package com.timotheemato.rssfeedaggregator.network.services;
 
 import com.timotheemato.rssfeedaggregator.network.interfaces.IFeedService;
-import com.timotheemato.rssfeedaggregator.network.models.Feed;
+import com.timotheemato.rssfeedaggregator.network.models.Post;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 
@@ -23,8 +23,8 @@ public class FeedService {
         this.feedService = retrofit.create(IFeedService.class);
     }
 
-    public Observable<Feed> getFeed(Integer limit, Integer offset) {
-        return feedService.getFeed(limit, offset)
+    public Observable<List<Post>> getFeed(String authorization, Integer id, Integer limit, Integer offset) {
+        return feedService.getFeed(authorization, id, limit, offset)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -1,6 +1,6 @@
 package com.timotheemato.rssfeedaggregator.network.interfaces;
 
-import com.timotheemato.rssfeedaggregator.network.models.Feed;
+import com.timotheemato.rssfeedaggregator.network.models.Post;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
 import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 
@@ -20,8 +20,10 @@ import rx.Observable;
  */
 
 public interface IFeedService {
-    @GET("feed")
-    Observable<Feed> getFeed(@Query("limit") Integer limit, @Query("offset") Integer offset);
+    @GET("feed/{id}")
+    Observable<List<Post>> getFeed(@Header("Authorization") String authorization,
+                                   @Path("id") Integer id, @Query("limit") Integer limit,
+                                   @Query("offset") Integer offset);
 
     @GET("subscriptions")
     Observable<List<Subscription>> getSubscriptions(@Header("Authorization") String authorization);
