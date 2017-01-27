@@ -2,9 +2,11 @@ package com.timotheemato.rssfeedaggregator.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.timotheemato.rssfeedaggregator.R;
@@ -27,15 +29,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public static final int VIEW_TYPE_LOADING = 0;
     public static final int VIEW_TYPE_ACTIVITY = 1;
 
+    private boolean isStillLoading = true;
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)
         TextView title;
+
+        ProgressBar progressBar;
+        TextView endOfList;
 
 
         public ViewHolder(final View view, boolean isLoading) {
             super(view);
             if (!isLoading) {
                 ButterKnife.bind(this, view);
+            } else {
+                progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+                endOfList = (TextView) view.findViewById(R.id.end_of_list);
             }
         }
     }
@@ -71,8 +81,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             return viewHolder;
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.progressbar_row, parent, false);
+            View view = LayoutInflater.from(context)
+                    .inflate(R.layout.progressbar_row, parent, false);
 
             final ViewHolder viewHolder = new ViewHolder(view, true);
 
@@ -85,6 +95,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         if (position < postList.size()) {
             Post currentPost = postList.get(position);
             holder.title.setText(currentPost.getTitle());
+        } else {
+            if (!isStillLoading) {
+                holder.progressBar.setVisibility(View.GONE);
+                holder.endOfList.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -97,5 +112,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public int getItemViewType(int position) {
         return (position >= postList.size()) ? VIEW_TYPE_LOADING
                 : VIEW_TYPE_ACTIVITY;
+    }
+
+    public void stopEndless() {
+        isStillLoading = false;
+        notifyDataSetChanged();
+    }
+
+    public boolean isStillLoading() {
+        return isStillLoading;
     }
 }

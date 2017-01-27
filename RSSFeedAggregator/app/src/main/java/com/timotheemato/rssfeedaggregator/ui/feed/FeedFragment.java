@@ -83,6 +83,7 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
     public void onStart() {
         super.onStart();
         if (postList.size() == 0) {
+            startLoading();
             feedViewModel.getPosts(feedId, 10, 0);
         }
     }
@@ -107,6 +108,7 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.d("FeedFragment", "Loading : page " + page + ", offset : " + totalItemsCount);
                 feedViewModel.getPosts(feedId, 10, totalItemsCount);
             }
         };
@@ -151,6 +153,10 @@ public class FeedFragment extends BaseFragment implements FeedContract.View {
         stopLoading();
         if (postList.size() == 0 && adapter.getItemCount() == 0) {
             showError();
+        } else if (postList.size() == 0 && adapter.getItemCount() != 0) {
+            showMessage("No more posts");
+            adapter.stopEndless();
+            contentLayout.setVisibility(View.VISIBLE);
         } else {
             adapter.addPostToList(postList);
             contentLayout.setVisibility(View.VISIBLE);
