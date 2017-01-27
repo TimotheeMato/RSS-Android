@@ -1,6 +1,7 @@
 package com.timotheemato.rssfeedaggregator.ui.adapters;
 
 import android.content.Context;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.timotheemato.rssfeedaggregator.R;
+import com.timotheemato.rssfeedaggregator.activities.MainActivity;
 import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
         @BindView(R.id.description)
         TextView description;
 
-        public ViewHolder(View view) {
+        public ViewHolder(final View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -49,10 +51,19 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
     @Override
     public SubscriptionsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                               int viewType) {
-        View v = LayoutInflater.from(context)
+        View view = LayoutInflater.from(context)
                 .inflate(R.layout.subscription_row, parent, false);
 
-        return new ViewHolder(v);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Subscription subscription = subscriptionList.get(viewHolder.getAdapterPosition());
+                ((MainActivity)context).showFeed(subscription.getId(), subscription.getTitle());
+            }
+        });
+
+        return viewHolder;
     }
 
     @Override

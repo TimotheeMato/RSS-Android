@@ -3,6 +3,7 @@ package com.timotheemato.rssfeedaggregator.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
+import com.timotheemato.rssfeedaggregator.ui.feed.FeedFragment;
 import com.timotheemato.rssfeedaggregator.ui.subscriptions.SubscriptionsFragment;
 
 import butterknife.BindView;
@@ -51,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void showFeed(int feedId, String feedTitle) {
+        Fragment fragment = FeedFragment.newInstance(feedId, feedTitle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        ft.replace(R.id.fragment_container, fragment, "feed_fragment");
+        ft.commit();
     }
 
     @Override
