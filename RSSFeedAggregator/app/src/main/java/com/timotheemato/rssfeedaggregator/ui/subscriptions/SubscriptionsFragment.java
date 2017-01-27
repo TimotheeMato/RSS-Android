@@ -1,17 +1,25 @@
 package com.timotheemato.rssfeedaggregator.ui.subscriptions;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.timotheemato.rssfeedaggregator.R;
+import com.timotheemato.rssfeedaggregator.activities.MainActivity;
 import com.timotheemato.rssfeedaggregator.base.BaseFragment;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
@@ -22,19 +30,22 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SubscriptionsFragment extends BaseFragment implements SubscriptionsContract.View {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.content_layout)
-    LinearLayout contentLayout;
+    RelativeLayout contentLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.loading_layout)
     RelativeLayout loadingLayout;
     @BindView(R.id.error_layout)
     RelativeLayout errorLayout;
+    @BindView(R.id.add_subscription_button)
+    FloatingActionButton addSubscriptionButton;
     private SubscriptionsViewModel subscriptionsViewModel;
 
     public SubscriptionsFragment() {
@@ -84,6 +95,7 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     @Override
     public void stopLoading() {
+        addSubscriptionButton.setVisibility(View.VISIBLE);
         contentLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.GONE);
@@ -91,9 +103,11 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     @Override
     public void startLoading() {
+        addSubscriptionButton.setVisibility(View.GONE);
         contentLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -112,5 +126,36 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         } else {
 
         }
+    }
+
+    private void createSubscriptionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.DialogCustom));
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        builder.setTitle("Enter an URL");
+
+        builder.setView(inflater.inflate(R.layout.dialog_subscribe, null))
+                // Add action buttons
+                .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(getResources().getColor(R.color.colorPrimary));
+        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    @OnClick(R.id.add_subscription_button)
+    public void addSubscription(View view) {
+        createSubscriptionDialog();
     }
 }

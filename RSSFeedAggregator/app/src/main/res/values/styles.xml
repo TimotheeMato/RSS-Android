@@ -13,4 +13,9 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="DialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>
