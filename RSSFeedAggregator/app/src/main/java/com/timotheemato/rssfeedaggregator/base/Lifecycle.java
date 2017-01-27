@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 public interface Lifecycle {
 
     interface View {
-
+        void showMessage(String message);
     }
 
     interface ViewModel {

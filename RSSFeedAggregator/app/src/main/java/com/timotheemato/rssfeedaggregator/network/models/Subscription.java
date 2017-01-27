@@ -14,7 +14,6 @@ public class Subscription {
     @Expose private String title;
     @Expose private String description;
     @Expose private String author;
-    @Expose private List<String> errors;
 
     public Integer getId() {
         return id;
@@ -54,13 +53,5 @@ public class Subscription {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 }

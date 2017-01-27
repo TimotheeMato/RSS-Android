@@ -3,6 +3,7 @@ package com.timotheemato.rssfeedaggregator.ui.login;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.timotheemato.rssfeedaggregator.base.BaseViewModel;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
@@ -17,10 +18,9 @@ import rx.Observer;
  * Created by tmato on 1/22/17.
  */
 
-public class LoginViewModel implements LoginContract.ViewModel {
+public class LoginViewModel extends BaseViewModel implements LoginContract.ViewModel {
 
     private LoginContract.View viewCallback;
-    private RequestManager requestManager;
     private SharedPrefManager sharedPrefManager;
 
     public LoginViewModel(RequestManager requestManager, SharedPrefManager sharedPrefManager) {
@@ -54,32 +54,8 @@ public class LoginViewModel implements LoginContract.ViewModel {
         }
     }
 
-    private void checkError(Throwable e, String message) {
-        if (e instanceof HttpException) {
-            int statusCode = ((HttpException) e).code();
-            if (statusCode >= 400 && statusCode < 500) {
-                ErrorResponse errorResponse = requestManager.getError(((HttpException) e).response());
-                if (errorResponse.getErrors().get(0) != null) {
-                    viewCallback.showMessage(errorResponse.getErrors().get(0));
-                } else {
-                    viewCallback.showMessage(message);
-                }
-            } else {
-                viewCallback.showMessage("Network failure, try again later");
-            }
-        } else {
-            String errorMessage = e.getMessage();
-            if (!message.equals("")) {
-                viewCallback.showMessage(errorMessage);
-            } else {
-                viewCallback.showMessage("Technical error, try again later");
-            }
-        }
-    }
-
     private void onLoginError(Throwable e) {
         if (viewCallback != null) {
-
             viewCallback.stopLoading();
             checkError(e, "Login failure");
         }

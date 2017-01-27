@@ -1,12 +1,14 @@
 package com.timotheemato.rssfeedaggregator.ui.subscriptions;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.timotheemato.rssfeedaggregator.R;
@@ -14,14 +16,25 @@ import com.timotheemato.rssfeedaggregator.base.BaseFragment;
 import com.timotheemato.rssfeedaggregator.base.Lifecycle;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
-import com.timotheemato.rssfeedaggregator.ui.login.LoginFragment;
-import com.timotheemato.rssfeedaggregator.ui.login.LoginViewModel;
+import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SubscriptionsFragment extends BaseFragment implements SubscriptionsContract.View {
 
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.content_layout)
+    LinearLayout contentLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.loading_layout)
+    RelativeLayout loadingLayout;
+    @BindView(R.id.error_layout)
+    RelativeLayout errorLayout;
     private SubscriptionsViewModel subscriptionsViewModel;
 
     public SubscriptionsFragment() {
@@ -54,6 +67,12 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        subscriptionsViewModel.getSubscriptions();
+    }
+
+    @Override
     protected Lifecycle.ViewModel getViewModel() {
         return subscriptionsViewModel;
     }
@@ -65,6 +84,33 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
 
     @Override
     public void stopLoading() {
+        contentLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void startLoading() {
+        contentLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showError() {
+        contentLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showContent(List<Subscription> subscriptionList) {
+        stopLoading();
+        Log.d("subscriptionsFragment", "showContent");
+        if (subscriptionList.size() == 0) {
+            showError();
+        } else {
+
+        }
     }
 }

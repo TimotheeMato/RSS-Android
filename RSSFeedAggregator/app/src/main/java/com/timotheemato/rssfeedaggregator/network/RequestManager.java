@@ -6,11 +6,13 @@ import com.timotheemato.rssfeedaggregator.BuildConfig;
 import com.timotheemato.rssfeedaggregator.network.models.ErrorResponse;
 import com.timotheemato.rssfeedaggregator.network.models.LoginResponse;
 import com.timotheemato.rssfeedaggregator.network.models.SimpleResponse;
+import com.timotheemato.rssfeedaggregator.network.models.Subscription;
 import com.timotheemato.rssfeedaggregator.network.services.FeedService;
 import com.timotheemato.rssfeedaggregator.network.services.LoginService;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -77,12 +79,8 @@ public class RequestManager {
         return loginService.login(email, password);
     }
 
-    public Retrofit getRetrofit() {
-        return retrofit;
-    }
-
-    public void setRetrofit(Retrofit retrofit) {
-        this.retrofit = retrofit;
+    public Observable<List<Subscription>> getSubscriptions(String authorization) {
+        return feedService.getSubscriptions(authorization);
     }
 
     public ErrorResponse getError(Response response) {
