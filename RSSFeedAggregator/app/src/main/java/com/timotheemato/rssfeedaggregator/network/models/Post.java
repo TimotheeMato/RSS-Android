@@ -2,6 +2,8 @@ package com.timotheemato.rssfeedaggregator.network.models;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.Date;
+
 /**
  * Created by tmato on 1/21/17.
  */
@@ -18,7 +20,7 @@ public class Post {
     @Expose
     private String author;
     @Expose
-    private String date;
+    private long date;
     @Expose
     private boolean read;
     @Expose
@@ -64,11 +66,11 @@ public class Post {
         this.author = author;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

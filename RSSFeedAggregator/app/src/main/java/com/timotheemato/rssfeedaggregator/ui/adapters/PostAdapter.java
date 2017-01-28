@@ -12,7 +12,11 @@ import android.widget.TextView;
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.network.models.Post;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,10 +34,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public static final int VIEW_TYPE_ACTIVITY = 1;
 
     private boolean isStillLoading = true;
+    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.FRANCE);
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title)
         TextView title;
+        @BindView(R.id.date)
+        TextView date;
 
         ProgressBar progressBar;
         TextView endOfList;
@@ -95,6 +102,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         if (position < postList.size()) {
             Post currentPost = postList.get(position);
             holder.title.setText(currentPost.getTitle());
+            holder.date.setText(dateFormat.format(new Date(currentPost.getDate())));
         } else {
             if (!isStillLoading) {
                 holder.progressBar.setVisibility(View.GONE);
