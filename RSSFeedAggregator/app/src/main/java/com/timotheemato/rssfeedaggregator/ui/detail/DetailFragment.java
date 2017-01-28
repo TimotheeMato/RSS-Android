@@ -1,6 +1,7 @@
 package com.timotheemato.rssfeedaggregator.ui.detail;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,7 +40,7 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.date_and_author)
     TextView dateAndAuthor;
     @BindView(R.id.description)
-    TextView description;
+    WebView description;
     @BindView(R.id.link_button)
     Button linkButton;
 
@@ -98,8 +101,8 @@ public class DetailFragment extends Fragment {
             dateAndAuthor.setText("on " + dateFormat.format(new Date(currentPost.getDate())));
         }
 
-        description.setText(Html.fromHtml(currentPost.getDescription()));
-        description.setMovementMethod(LinkMovementMethod.getInstance());
+        description.getSettings().setJavaScriptEnabled(true);
+        description.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100%;}</style>" + currentPost.getDescription(), "test/html", "utf-8", null);
 
         return rootView;
     }

@@ -40,7 +40,11 @@ public class FeedViewModel extends BaseViewModel implements FeedContract.ViewMod
     @Override
     public void getPosts(int feedId, int limit, int offset) {
         String token = sharedPrefManager.getToken();
-        requestManager.getFeed(token, feedId, limit, offset).subscribe(new FeedObserver());
+        if (feedId != -1) {
+            requestManager.getFeed(token, feedId, limit, offset).subscribe(new FeedObserver());
+        } else {
+            requestManager.getAllFeeds(token, limit, offset).subscribe(new FeedObserver());
+        }
     }
 
     private void onFeedError(Throwable e) {

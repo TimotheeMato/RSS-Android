@@ -25,6 +25,10 @@ public interface IFeedService {
                                    @Path("id") Integer id, @Query("limit") Integer limit,
                                    @Query("offset") Integer offset);
 
+    @GET("feed")
+    Observable<List<Post>> getAllFeeds(@Header("Authorization") String authorization,
+                                   @Query("limit") Integer limit, @Query("offset") Integer offset);
+
     @GET("subscriptions")
     Observable<List<Subscription>> getSubscriptions(@Header("Authorization") String authorization);
 

@@ -52,4 +52,10 @@ public class FeedService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<List<Post>> getAllFeeds(String authorization, Integer limit, Integer offset) {
+        return feedService.getAllFeeds(authorization, limit, offset)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

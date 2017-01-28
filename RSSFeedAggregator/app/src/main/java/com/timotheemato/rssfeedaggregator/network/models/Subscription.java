@@ -55,8 +55,9 @@ public class Subscription {
         this.author = author;
     }
 
-    public Subscription(String title, String description) {
+    public Subscription(Integer id, String title, String description) {
         this.title = title;
         this.description = description;
+        this.id = id;
     }
 }

@@ -53,6 +53,7 @@ public class SubscriptionsViewModel extends BaseViewModel implements Subscriptio
     private void onGetSubscriptionsSuccess(List<Subscription> subscriptionList) {
         if (viewCallback != null) {
             viewCallback.stopLoading();
+            subscriptionList.add(0, new Subscription(-1, "All feeds", "All the posts from all of your feeds"));
             viewCallback.showContent(subscriptionList);
         }
     }

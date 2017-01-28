@@ -1,17 +1,16 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context="com.timotheemato.rssfeedaggregator.ui.detail.DetailFragment">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp">
 
         <LinearLayout
             android:padding="8dp"
@@ -38,10 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <WebView
                 android:id="@+id/description"
                 android:layout_marginTop="8dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eget pharetra neque. Nulla ultrices gravida nibh quis rhoncus. In quis orci libero. Praesent vel cursus orci, nec pulvinar est. Donec eros sem, condimentum quis varius sed, feugiat sagittis turpis. Phasellus ornare malesuada lectus mollis porttitor. Aliquam facilisis congue consequat. Proin a feugiat ligula, non porttitor ligula. Aliquam porttitor felis tortor, at volutpat felis tristique id. Maecenas a vulputate augue, id interdum diam. Pellentesque semper erat sit amet purus mattis cursus. Donec lacinia diam sagittis posuere consectetur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus vitae ex a lectus dictum ornare ac ac justo. Sed viverra sapien non eleifend aliquam."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -56,6 +54,4 @@
 
     </android.support.v7.widget.CardView>
 
-    </ScrollView>
-
-</FrameLayout>
+</ScrollView>

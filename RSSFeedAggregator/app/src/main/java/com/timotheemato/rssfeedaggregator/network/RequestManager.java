@@ -92,6 +92,10 @@ public class RequestManager {
         return feedService.getFeed(authorization, id, limit, offset);
     }
 
+    public Observable<List<Post>> getAllFeeds(String authorization, Integer limit, Integer offset) {
+        return feedService.getAllFeeds(authorization, limit, offset);
+    }
+
     public Observable<SimpleResponse> read(String authorization, Integer id) {
         return feedService.read(authorization, id);
     }
