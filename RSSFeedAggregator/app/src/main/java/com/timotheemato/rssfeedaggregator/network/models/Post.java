@@ -1,5 +1,8 @@
 package com.timotheemato.rssfeedaggregator.network.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
 import java.util.Date;
@@ -8,7 +11,7 @@ import java.util.Date;
  * Created by tmato on 1/21/17.
  */
 
-public class Post {
+public class Post implements Parcelable {
     @Expose
     private int id;
     @Expose
@@ -88,5 +91,45 @@ public class Post {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.description);
+        dest.writeString(this.title);
+        dest.writeString(this.link);
+        dest.writeString(this.author);
+        dest.writeLong(this.date);
+        dest.writeByte((byte) (this.read ? 1 : 0));
+        dest.writeByte((byte) (this.favorite ? 1 : 0));
+    }
+
+    public Post(Parcel in) {
+        this.id = in.readInt();
+        this.description = in.readString();
+        this.title = in.readString();
+        this.link = in.readString();
+        this.author = in.readString();
+        this.date = in.readLong();
+        this.read = in.readByte() != 0;
+        this.favorite = in.readByte() != 0;
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel source) {
+            return new Post(source);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }

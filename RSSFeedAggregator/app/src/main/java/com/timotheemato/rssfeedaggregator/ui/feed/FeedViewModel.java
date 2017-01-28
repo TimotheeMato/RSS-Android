@@ -8,6 +8,8 @@ import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
 import com.timotheemato.rssfeedaggregator.network.RequestManager;
 import com.timotheemato.rssfeedaggregator.network.models.Post;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import rx.Observer;

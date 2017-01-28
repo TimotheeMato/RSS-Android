@@ -12,6 +12,8 @@ import android.view.MenuItem;
 
 import com.timotheemato.rssfeedaggregator.R;
 import com.timotheemato.rssfeedaggregator.data.SharedPrefManager;
+import com.timotheemato.rssfeedaggregator.network.models.Post;
+import com.timotheemato.rssfeedaggregator.ui.detail.DetailFragment;
 import com.timotheemato.rssfeedaggregator.ui.feed.FeedFragment;
 import com.timotheemato.rssfeedaggregator.ui.subscriptions.SubscriptionsFragment;
 
@@ -73,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
         ft.replace(R.id.fragment_container, fragment, "feed_fragment");
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void showPostDetail(Post post) {
+        Fragment fragment = DetailFragment.newInstance(post);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        ft.replace(R.id.fragment_container, fragment, "detail_fragment");
         ft.addToBackStack(null);
         ft.commit();
     }

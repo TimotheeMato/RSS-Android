@@ -1,15 +1,23 @@
 package com.timotheemato.rssfeedaggregator.ui.adapters;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.timotheemato.rssfeedaggregator.R;
+import com.timotheemato.rssfeedaggregator.activities.MainActivity;
 import com.timotheemato.rssfeedaggregator.network.models.Post;
 
 import java.text.DateFormat;
@@ -78,13 +86,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     .inflate(R.layout.post_row, parent, false);
 
             final ViewHolder viewHolder = new ViewHolder(view, false);
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Subscription subscription = subscriptionList.get(viewHolder.getAdapterPosition());
-//                ((MainActivity)context).showFeed(subscription.getId(), subscription.getTitle());
-//            }
-//        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Post post = postList.get(viewHolder.getAdapterPosition());
+                ((MainActivity)context).showPostDetail(post);
+            }
+        });
 
             return viewHolder;
         } else {
@@ -103,6 +111,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             Post currentPost = postList.get(position);
             holder.title.setText(currentPost.getTitle());
             holder.date.setText(dateFormat.format(new Date(currentPost.getDate())));
+            if (currentPost.isRead()) {
+                holder.title.setTextColor(Color.LTGRAY);
+                holder.date.setTextColor(Color.LTGRAY);
+            } else {
+                holder.title.setTextColor(Color.BLACK);
+                holder.date.setTextColor(Color.BLACK);
+            }
         } else {
             if (!isStillLoading) {
                 holder.progressBar.setVisibility(View.GONE);

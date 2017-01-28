@@ -46,4 +46,10 @@ public class FeedService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<SimpleResponse> read(String authorization, Integer id) {
+        return feedService.read(authorization, id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

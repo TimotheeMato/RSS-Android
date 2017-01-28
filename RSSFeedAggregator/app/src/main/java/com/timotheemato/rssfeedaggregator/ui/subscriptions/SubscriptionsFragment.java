@@ -81,7 +81,7 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new SubscriptionsAdapter(getContext());
+        adapter = new SubscriptionsAdapter(getContext(), this);
         recyclerView.setAdapter(adapter);
 
         return rootView;
@@ -117,6 +117,7 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
         contentLayout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         loadingLayout.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -138,7 +139,7 @@ public class SubscriptionsFragment extends BaseFragment implements Subscriptions
     }
 
     private void createSubscriptionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.DialogCustom));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         builder.setTitle("Enter an URL");
 

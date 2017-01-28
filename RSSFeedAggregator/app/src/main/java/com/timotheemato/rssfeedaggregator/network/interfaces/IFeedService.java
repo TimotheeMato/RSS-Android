@@ -32,7 +32,9 @@ public interface IFeedService {
     @POST("subscribe")
     Observable<Subscription> subscribe(@Header("Authorization") String authorization, @Field("url") String url);
 
-    @FormUrlEncoded
     @POST("unsubscribe/{id}")
     Observable<SimpleResponse> unsubscribe(@Header("Authorization") String authorization, @Path("id") Integer id);
+
+    @POST("read/{id}")
+    Observable<SimpleResponse> read(@Header("Authorization") String authorization, @Path("id") Integer id);
 }

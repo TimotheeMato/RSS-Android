@@ -92,6 +92,14 @@ public class RequestManager {
         return feedService.getFeed(authorization, id, limit, offset);
     }
 
+    public Observable<SimpleResponse> read(String authorization, Integer id) {
+        return feedService.read(authorization, id);
+    }
+
+    public Observable<SimpleResponse> unsubscribe(String authorization, Integer id) {
+        return feedService.unsubscribe(authorization, id);
+    }
+
     public ErrorResponse getError(Response response) {
         try {
             return errorConverter.convert(response.errorBody());
